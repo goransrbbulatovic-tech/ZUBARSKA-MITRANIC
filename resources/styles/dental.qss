@@ -1,0 +1,44 @@
+/* DentaPro — Global Stylesheet */
+
+QWidget {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 11px;
+}
+
+/* ── Scrollbars ─────────────────────────────────────────────────────────── */
+QScrollBar:vertical {
+    border: none;
+    background: #F5F5F5;
+    width: 8px;
+    border-radius: 4px;
+}
+QScrollBar::handle:vertical {
+    background: #BDBDBD;
+    border-radius: 4px;
+    min-height: 30px;
+}
+QScrollBar::handle:vertical:hover { background: #9E9E9E; }
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }
+
+QScrollBar:horizontal {
+    border: none;
+    background: #F5F5F5;
+    height: 8px;
+    border-radius: 4px;
+}
+QScrollBar::handle:horizontal {
+    background: #BDBDBD;
+    border-radius: 4px;
+    min-width: 30px;
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0; }
+
+/* ── ToolTip ─────────────────────────────────────────────────────────────── */
+QToolTip {
+    background: #212121;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 10px;
+}

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <!-- Application styles -->
+        <file>styles/dental.qss</file>
+    </qresource>
+</RCC>
