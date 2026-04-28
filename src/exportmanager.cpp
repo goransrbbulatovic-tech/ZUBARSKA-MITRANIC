@@ -806,7 +806,7 @@ bool ExportManager::exportFullReportToXlsx(QWidget* parent)
         }
     }
 
-    writeXlsxFile(path, "Izvjestaj".left(31), rows, header,
+    writeXlsxFile(path, QString("Izvjestaj"), rows, header,
                   ClinicSettings::instance().clinicName);
 
     if (QFile::exists(path)) {
