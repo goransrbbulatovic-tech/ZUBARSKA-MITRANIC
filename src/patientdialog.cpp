@@ -101,7 +101,7 @@ void PatientDialog::setupUi()
     form->addRow(makeLbl("Ime*:"), m_firstName);
     form->addRow(makeLbl("Prezime*:"), m_lastName);
     form->addRow(makeLbl("Datum rođenja:"), m_dob);
-    form->addRow(makeLbl("Spol:"), m_gender);
+    form->addRow(makeLbl("pol:"), m_gender);
     form->addRow(makeLbl("Telefon:"), m_phone);
     form->addRow(makeLbl("E-mail:"), m_email);
     form->addRow(makeLbl("Adresa:"), m_address);
