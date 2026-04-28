@@ -11,6 +11,7 @@ class QTabWidget;
 class QTableWidget;
 class QDateEdit;
 class QComboBox;
+class QPushButton;
 class PatientHistoryWidget;
 class StatisticsWidget;
 
