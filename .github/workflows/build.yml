@@ -1,0 +1,63 @@
+name: Build DentaPro Windows EXE
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    name: Windows Qt6 MSVC
+    runs-on: windows-2022
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        shell: powershell
+        run: |
+          python -m pip install --upgrade pip --quiet
+          pip install aqtinstall --quiet
+          python -m aqt install-qt windows desktop 6.5.3 win64_msvc2019_64 --outputdir C:\Qt
+          python -m aqt install-qt windows desktop 6.5.3 win64_msvc2019_64 --outputdir C:\Qt --modules qtpdf
+
+      - name: Build
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          cmake -B build -S . -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=C:\Qt\6.5.3\msvc2019_64
+          cd build
+          nmake
+
+      - name: Package
+        shell: powershell
+        run: |
+          $exeName = "Zubarska ordinacija Mitranic.exe"
+          New-Item -ItemType Directory -Force -Path "pkg"
+          Copy-Item "build\$exeName" "pkg\"
+          & "C:\Qt\6.5.3\msvc2019_64\bin\windeployqt.exe" --release --no-translations --sql "pkg\$exeName"
+          $sql = "C:\Qt\6.5.3\msvc2019_64\plugins\sqldrivers\qsqlite.dll"
+          New-Item -ItemType Directory -Force -Path "pkg\sqldrivers"
+          if (Test-Path $sql) { Copy-Item $sql "pkg\sqldrivers\" -Force }
+          Compress-Archive -Path "pkg\*" -DestinationPath "ZubarskaOrdinacijaMitranic-Windows-x64.zip" -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZubarskaOrdinacijaMitranic-Windows-x64
+          path: ZubarskaOrdinacijaMitranic-Windows-x64.zip
+          retention-days: 30
+
+      - name: Create Release
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: "Zubarska ordinacija Mitranic v1.0.${{ github.run_number }}"
+          body: "Preuzmi ZIP, raspakuj i pokreni exe."
+          files: ZubarskaOrdinacijaMitranic-Windows-x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
